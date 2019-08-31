@@ -1,14 +1,17 @@
 package pl.sda.List;
 
 public class LinkedList implements IList {
-    Node first;
-    Node last;
-    int size = 0;
+    private Node first;
+    private Node last;
+    private int size = 0;
 
     //to do
     @Override
     public boolean isEmpty() {
-        return false;
+        if (size == 0) {
+            return true;
+        }
+        return false;   // inny zapis tego samego if:    return size==0 ? true : false
     }
 
     @Override
@@ -30,14 +33,47 @@ public class LinkedList implements IList {
     //to do
     @Override
     public void set(int index, long value) {
+        checkBounds(index);
+
+        Node tmp = first;
+        for (int i = 0; i < index; i++) {
+            tmp = tmp.getNext();
+        }
+        tmp.setValue(value);
 
     }
 
     //to do
     @Override
     public void remove(int index) {
+        checkBounds(index);
+
+        Node removingNode = getNodeFromIndex(index);
+        Node prev = removingNode.getPrev();
+        Node next = removingNode.getNext();
+        if(index != 0)
+            prev.setNext(next);
+        else
+            this.first = next;
+        if(index != size-1)
+            next.setPrev(prev);
+        else
+            this.last = prev;
+        size--;
+
 
     }
+
+
+    private Node getNodeFromIndex(int index) {
+        Node tmp = first;
+        for (int i = 0; i < index; i++) {
+            tmp = tmp.getNext();
+        }
+        return tmp;
+    }
+
+
 
     @Override
     public int firstIndexWith(long value) {
